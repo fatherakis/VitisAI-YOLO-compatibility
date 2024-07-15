@@ -11,6 +11,8 @@ This guide aims to provide the necessary information and mitigation tactics to s
 3. [Model definition fixes](#model-definition-fixes)
 4. [Vitis AI](#vitis-ai)
 5. [Versal](#versal)
+6. [Postprocessing](#postprocessing)
+7. [Resources](#resources-links)
 
 ## What is the issue?
 Vitis-AI has a limited amount of operations supported detailed here:
@@ -34,7 +36,7 @@ Fixing the SiLU layer compatibility issue is rather easy. We can replace all the
 
 While one layer replacement will not affect the accuracy | precision significantly, YOLO models feature a lot them and the losses are very noticable.
 
-[YOLO Converter.py](Resources/Model_Fixes/YOLO_converter.py) is provided for this exact replacement of layers using PyTorch.
+[YOLO Converter.py](resources/model_fixes/yolo_converter.py) is provided for this exact replacement of layers using PyTorch.
 
 In this script we also fix the "issue" of ultralytics models. If you load the best.pt file of the exported model, you will find its a dictionary containing the model, the training parameters and the training logs. Keeping the model from said dictionary, we find that instead of a YOLO model class, its a DetectionModel class which follows typical PyTorch Model classes and retains the functionality of the YOLO model. Leveraging this feature, we replace the layers (with slope 0.1015625 instead of 0.1 as a requirement for VCK190) and save the new DetectionModel class model.
 
@@ -265,3 +267,13 @@ It loads all calculated boxes and fuses them in a json dictionary in XYWH for co
 
 
 Finally, [evaluate.py](resources/postproc/evaluate.py) loads the ground truths (gt_eval.json) and our file as an argument (``python evaluate.py coco-preped-yolov8n.json``) calculating our corresponding metrics.
+
+
+
+## Resources Links 
+
+[Vitis-AI](https://github.com/Xilinx/Vitis-AI.git)
+[Vitis-AI-Tutorials](https://arc.net/l/quote/lsztrdzq)
+[Paper & Resources (models,datasets)](https://github.com/billpsomas/mars_crater_detection)
+[Ultralytics](https://github.com/ultralytics/ultralytics) 
+[PyTorch](https://pytorch.org/)
